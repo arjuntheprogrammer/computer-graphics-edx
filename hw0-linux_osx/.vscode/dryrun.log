@@ -1,0 +1,5 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory `/Users/arjungupta/Courses/EDX/ComputerGraphics/hw0-linux_osx'
+make: Nothing to be done for `all'.
+make: Leaving directory `/Users/arjungupta/Courses/EDX/ComputerGraphics/hw0-linux_osx'
+ 

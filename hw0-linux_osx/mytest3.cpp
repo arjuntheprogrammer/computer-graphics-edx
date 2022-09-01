@@ -50,20 +50,20 @@ GLint texturing = 1 ; // ** NEW ** to turn on/off texturing
 GLint lighting = 1 ; // ** NEW ** to turn on/off lighting
 
 /* Variables to set uniform params for lighting fragment shader */
-GLuint light0dirn ; 
-GLuint light0color ; 
-GLuint light1posn ; 
-GLuint light1color ; 
-GLuint ambient ; 
-GLuint diffuse ; 
-GLuint specular ; 
-GLuint shininess ; 
+GLuint light0dirn ;
+GLuint light0color ;
+GLuint light1posn ;
+GLuint light1color ;
+GLuint ambient ;
+GLuint diffuse ;
+GLuint specular ;
+GLuint shininess ;
 
 #include "shaders.h"
 #include "geometry3.h"
 
 
-/* New helper transformation function to transform vector by modelview */ 
+/* New helper transformation function to transform vector by modelview */
 void transformvec (const GLfloat input[4], GLfloat output[4]) {
 	glm::vec4 inputvec(input[0], input[1], input[2], input[3]);
 	glm::vec4 outputvec = modelview * inputvec;
@@ -91,7 +91,7 @@ void display(void)
 	// draw white polygon (square) of unit length centered at the origin
 	// Note that vertices must generally go counterclockwise
 	// Change from the first program, in that I just made it white.
-	// The old OpenGL code of using glBegin... glEnd no longer appears. 
+	// The old OpenGL code of using glBegin... glEnd no longer appears.
 	// The new version uses vertex buffer objects from init.
 
 	glUniform1i(islight, 0); // Turn off lighting (except on teapot, later)
@@ -108,7 +108,7 @@ void display(void)
 	// We now maintain a stack for the modelview matrices. Changes made to the stack after pushing
 	// are discarded once it is popped.
 	pushMatrix(modelview);
-	// 1st pillar 
+	// 1st pillar
 	// This function builds a new matrix. It doesn't actually modify the passed in matrix.
 	// Consequently, we need to assign this result to modelview.
 	modelview = modelview * glm::translate(identity, glm::vec3(-0.4, -0.4, 0.0));
@@ -150,7 +150,8 @@ void display(void)
 		const GLfloat small[] = { 0.2f, 0.2f, 0.2f, 1 };
 		const GLfloat high[] = { 100 };
 		const GLfloat zero[] = { 0.0, 0.0, 0.0, 1.0 };
-		const GLfloat light_specular[] = { 1, 0.5, 0, 1 };
+		// const GLfloat light_specular[] = { 1, 0.5, 0, 1 };
+		const GLfloat light_specular[] = { 1, 1, 0, 1 };
 		const GLfloat light_specular1[] = { 0, 0.5, 1, 1 };
 		const GLfloat light_direction[] = { 0.5, 0, 0, 0 }; // Dir light 0 in w
 		const GLfloat light_position1[] = { 0, -0.5, 0, 1 };
@@ -175,7 +176,7 @@ void display(void)
 		glUniform4fv(specular, 1, one);
 		glUniform1fv(shininess, 1, high);
 
-		// Enable and Disable everything around the teapot. 
+		// Enable and Disable everything around the teapot.
 		// Generally, we would also need to define normals etc.
 		// In the old OpenGL code, GLUT defines normals for us. The glut teapot can't
 		// be drawn in modern OpenGL, so we need to load a 3D model for it. The normals
@@ -205,10 +206,10 @@ void display(void)
 	// What happens if I draw the ground after the pillars?
 	// I will show this in class.
 
-	// glUniformMatrix4fv(modelviewPos, 1, GL_FALSE, &(modelview)[0][0]); 
+	// glUniformMatrix4fv(modelviewPos, 1, GL_FALSE, &(modelview)[0][0]);
 	// drawobject(FLOOR) ;
 
-	// don't wait! 
+	// don't wait!
 	// start processing buffered OpenGL routines
 
 
@@ -216,7 +217,7 @@ void display(void)
 	glFlush();
 }
 
-// ** NEW ** in this assignment, is an animation of a teapot 
+// ** NEW ** in this assignment, is an animation of a teapot
 // Hitting p will pause this animation; see keyboard callback
 
 void animation(void) {
@@ -224,7 +225,7 @@ void animation(void) {
 	rotamount = rotamount + 0.25;
 	if (teapotloc > 0.5) teapotloc = -0.5 ;
 	if (rotamount > 360.0) rotamount = 0.0;
-	glutPostRedisplay() ;  
+	glutPostRedisplay() ;
 }
 
 void moveTeapot() {
@@ -232,21 +233,21 @@ void moveTeapot() {
 	teapotloc = -0.05;
 }
 
-// Defines a Mouse callback to zoom in and out 
-// This is done by modifying gluLookAt         
-// The actual motion is in mousedrag           
-// mouse simply sets state for mousedrag       
-void mouse(int button, int state, int x, int y) 
+// Defines a Mouse callback to zoom in and out
+// This is done by modifying gluLookAt
+// The actual motion is in mousedrag
+// mouse simply sets state for mousedrag
+void mouse(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON) {
 		if (state == GLUT_UP) {
 			// Do Nothing ;
 		}
 		else if (state == GLUT_DOWN) {
-			mouseoldx = x ; mouseoldy = y ; // so we can move wrt x , y 
+			mouseoldx = x ; mouseoldy = y ; // so we can move wrt x , y
 		}
 	}
-	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) 
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
 	{ // Reset gluLookAt
 		eyeloc = 2.0 ;
 		modelview = glm::lookAt(glm::vec3(0, -eyeloc, eyeloc), glm::vec3(0, 0, 0), glm::vec3(0, 1, 1));
@@ -285,7 +286,7 @@ void saveScreenshot() {
 	BYTE *pixels = new BYTE[3*pix];
 	glReadBuffer(GL_FRONT);
 	glReadPixels(0,0,windowWidth,windowHeight,GL_BGR,GL_UNSIGNED_BYTE,pixels);
-	
+
 	FIBITMAP *img = FreeImage_ConvertFromRawBits(pixels, windowWidth, windowHeight, windowWidth * 3, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
 
 	std::cout << "Saving screenshot: screenshot.png\n";
@@ -294,8 +295,8 @@ void saveScreenshot() {
 	delete[] pixels;
 }
 
-// Defines what to do when various keys are pressed 
-void keyboard (unsigned char key, int x, int y) 
+// Defines what to do when various keys are pressed
+void keyboard (unsigned char key, int x, int y)
 {
 	switch (key) {
 		case 'h':
@@ -305,7 +306,7 @@ void keyboard (unsigned char key, int x, int y)
 			saveScreenshot();
 			break;
 		case 'i':
-			moveTeapot();			
+			moveTeapot();
 			eyeloc = 2.0f;
 			// Immediately update the modelview matrix
 			modelview = glm::lookAt(glm::vec3(0, -eyeloc, eyeloc), glm::vec3(0, 0, 0), glm::vec3(0, 1, 1));
@@ -325,13 +326,13 @@ void keyboard (unsigned char key, int x, int y)
 			if (animate) glutIdleFunc(animation) ;
 			else glutIdleFunc(NULL) ;
 			break ;
-		case 't': // ** NEW ** to turn on/off texturing ; 
+		case 't': // ** NEW ** to turn on/off texturing ;
 			texturing = !texturing ;
-			glutPostRedisplay() ; 
+			glutPostRedisplay() ;
 			break ;
-		case 's': // ** NEW ** to turn on/off shading (always smooth) ; 
+		case 's': // ** NEW ** to turn on/off shading (always smooth) ;
 			lighting = !lighting ;
-			glutPostRedisplay() ; 
+			glutPostRedisplay() ;
 			break ;
 		default:
 			break ;
@@ -345,8 +346,8 @@ void reshape(int w, int h)
 	windowHeight = h;
 	glViewport (0, 0, (GLsizei) w, (GLsizei) h);
 
-	// Think about the rationale for this choice for glm::perspective 
-	// What would happen if you changed near and far planes? 
+	// Think about the rationale for this choice for glm::perspective
+	// What would happen if you changed near and far planes?
 	projection = glm::perspective(30.0f / 180.0f * glm::pi<float>(), (GLfloat)w / (GLfloat)h, 1.0f, 10.0f);
 	glUniformMatrix4fv(projectionPos, 1, GL_FALSE, &projection[0][0]);
 }
@@ -392,7 +393,7 @@ void checkOpenGLVersion() {
 	}
 }
 
-void init (void) 
+void init (void)
 {
 	//Warn students about OpenGL version before 0xC0000005 error
 	checkOpenGLVersion();
@@ -414,18 +415,18 @@ void init (void)
 	GLuint program = glCreateProgram() ;
 	shaderprogram = initprogram(vertexshader, fragmentshader) ;
 	GLint linked;
-	glGetProgramiv(shaderprogram, GL_LINK_STATUS, &linked) ;  
+	glGetProgramiv(shaderprogram, GL_LINK_STATUS, &linked) ;
 
 	// * NEW * Set up the shader parameter mappings properly for lighting.
-	islight = glGetUniformLocation(shaderprogram,"islight") ;        
-	light0dirn = glGetUniformLocation(shaderprogram,"light0dirn") ;       
-	light0color = glGetUniformLocation(shaderprogram,"light0color") ;       
-	light1posn = glGetUniformLocation(shaderprogram,"light1posn") ;       
-	light1color = glGetUniformLocation(shaderprogram,"light1color") ;       
-	ambient = glGetUniformLocation(shaderprogram,"ambient") ;       
-	diffuse = glGetUniformLocation(shaderprogram,"diffuse") ;       
-	specular = glGetUniformLocation(shaderprogram,"specular") ;       
-	shininess = glGetUniformLocation(shaderprogram,"shininess") ;  
+	islight = glGetUniformLocation(shaderprogram,"islight") ;
+	light0dirn = glGetUniformLocation(shaderprogram,"light0dirn") ;
+	light0color = glGetUniformLocation(shaderprogram,"light0color") ;
+	light1posn = glGetUniformLocation(shaderprogram,"light1posn") ;
+	light1color = glGetUniformLocation(shaderprogram,"light1color") ;
+	ambient = glGetUniformLocation(shaderprogram,"ambient") ;
+	diffuse = glGetUniformLocation(shaderprogram,"diffuse") ;
+	specular = glGetUniformLocation(shaderprogram,"specular") ;
+	shininess = glGetUniformLocation(shaderprogram,"shininess") ;
 
 	// Get the positions of other uniform variables
 	projectionPos = glGetUniformLocation(shaderprogram, "projection");
@@ -439,7 +440,7 @@ void init (void)
 	glGenBuffers(3, teapotbuffers);
 
 	// Initialize texture
-	inittexture("wood.ppm", shaderprogram) ; 
+	inittexture("wood.ppm", shaderprogram) ;
 
 	// Initialize objects
 	initobject(FLOOR, (GLfloat *)floorverts, sizeof(floorverts), (GLfloat *)floorcol, sizeof(floorcol), (GLubyte *)floorinds, sizeof(floorinds), GL_TRIANGLES);
@@ -461,7 +462,7 @@ int main(int argc, char** argv)
 	// Requests the type of buffers (Single, RGB).
 	// Think about what buffers you would need...
 
-	// Request the depth if needed, later swith to double buffer 
+	// Request the depth if needed, later swith to double buffer
 	// OSX systems require another flag
 #ifdef __APPLE__
 	glutInitDisplayMode (GLUT_3_2_CORE_PROFILE | GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -469,20 +470,20 @@ int main(int argc, char** argv)
 	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 #endif
 
-	glutInitWindowSize (windowWidth, windowHeight); 
+	glutInitWindowSize (windowWidth, windowHeight);
 	glutCreateWindow ("Simple Demo with Shaders");
 
 #ifndef __APPLE__ // Do not use GLew on OSX systems!
-	GLenum err = glewInit() ; 
-	if (GLEW_OK != err) { 
-		std::cerr << "Error: " << glewGetString(err) << std::endl; 
-	} 
+	GLenum err = glewInit() ;
+	if (GLEW_OK != err) {
+		std::cerr << "Error: " << glewGetString(err) << std::endl;
+	}
 #endif
 
 	init(); // Always initialize first
 
 	// Now, we define callbacks and functions for various tasks.
-	glutDisplayFunc(display); 
+	glutDisplayFunc(display);
 	glutReshapeFunc(reshape) ;
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse) ;
